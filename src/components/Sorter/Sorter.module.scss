@@ -1,0 +1,32 @@
+.radiogroup {
+  width: 100%;
+  margin-bottom: 20px;
+
+  :global {
+    // Переопределяем стили для кнопок в Radio.Group
+    .ant-radio-button-wrapper {
+      height: auto !important; // Отменяем фиксированную высоту
+      padding: 8px 16px; // Добавляем отступы сверху и снизу
+      white-space: normal; // Разрешаем перенос текста
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 3; // Устанавливаем нормальную высоту строки
+    }
+
+    // Стили для активной кнопки
+    .ant-radio-button-wrapper-checked {
+      height: auto !important;
+    }
+
+    // Для всей группы кнопок
+    .ant-radio-group {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  .radio {
+
+  }
+}

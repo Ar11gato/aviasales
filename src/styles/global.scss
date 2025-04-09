@@ -1,0 +1,29 @@
+@import './reset';
+
+body {
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
+.app {
+  min-height: 100vh;
+  background: #E5E5E5;
+
+  .container {
+    //height: 100%;
+    width: 80%;
+    justify-self: center;
+  }
+
+  .content {
+    //height: 100%;
+    display: flex;
+
+    .right {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+}
