@@ -1,10 +1,11 @@
 import { useMyContext } from "./useMyContext.ts";
-import { ChangeEvent } from "react";
+
+import { CheckboxChangeEvent } from "antd";
 
 export default function useCheckbox(type: string) {
   const { state, setState } = useMyContext();
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: CheckboxChangeEvent) => {
     if (type === "all") {
       setState({
         ...state,
