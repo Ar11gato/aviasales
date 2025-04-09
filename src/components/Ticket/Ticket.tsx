@@ -1,6 +1,6 @@
 import { Card } from "antd";
 import classes from "./Ticket.module.scss";
-import logo from "../../../public/S7 Logo.png";
+
 import { ITicket } from "../../hooks/MyContextProvider.tsx";
 
 interface TicketProps {
@@ -51,7 +51,13 @@ const Ticket = ({ flightData }: TicketProps) => {
           body: "my-card",
         }}
         title={flightData?.price + " Р"}
-        extra={<img className={classes.image} src={logo} alt="" />}
+        extra={
+          <img
+            className={classes.image}
+            src={`//pics.avs.io/99/36/${flightData?.carrier}.png`}
+            alt=""
+          />
+        }
         style={{
           width: `100%`,
           marginBottom: 0,
