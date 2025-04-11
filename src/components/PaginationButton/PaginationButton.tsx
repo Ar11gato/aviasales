@@ -1,10 +1,10 @@
 import { Button } from "antd";
 import classes from "./PaginationButton.module.scss";
-import { useContext } from "react";
-import { MyContext } from "../../hooks/MyContextProvider.tsx";
+
+import { useMyContext } from "../../hooks/useMyContext.ts";
 
 const PaginationButton = () => {
-  const context = useContext(MyContext);
+  const context = useMyContext();
 
   return (
     <Button

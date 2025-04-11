@@ -1,45 +1,13 @@
 import { Card } from "antd";
 import classes from "./Ticket.module.scss";
+import { ITicketProps } from "../../types/types.ts";
+import {
+  formatTime,
+  formatTime2,
+  handleChange,
+} from "../../helpers/helpers.ts";
 
-import { ITicket } from "../../hooks/MyContextProvider.tsx";
-
-interface TicketProps {
-  flightData?: ITicket;
-}
-
-const Ticket = ({ flightData }: TicketProps) => {
-  const formatTime = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("ru-RU", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-  const formatTime2 = (dateString: string): string => {
-    const date = new Date(dateString);
-    date.setMinutes(
-      date.getMinutes() + (flightData?.segments[0].duration ?? 0),
-    );
-    return date.toLocaleTimeString("ru-RU", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
-  const handleChange = (e: number) => {
-    switch (e) {
-      case 0:
-        return "ПЕРЕСАДОК";
-      case 1:
-        return "ПЕРЕСАДКА";
-      case 2:
-      case 3:
-        return "ПЕРЕСАДКИ";
-    }
-  };
-
+const Ticket = ({ flightData }: ITicketProps) => {
   return (
     <div>
       <Card
@@ -91,7 +59,10 @@ const Ticket = ({ flightData }: TicketProps) => {
               </span>
               <span>
                 {formatTime(flightData?.segments[0].date ?? "")} -{" "}
-                {formatTime2(flightData?.segments[0]?.date ?? "")}
+                {formatTime2(
+                  flightData?.segments[0]?.date ?? "",
+                  flightData?.segments[0]?.duration ?? 0,
+                )}
               </span>
             </div>
             <div className={classes.second}>
@@ -101,7 +72,10 @@ const Ticket = ({ flightData }: TicketProps) => {
               </span>
               <span>
                 {formatTime(flightData?.segments[1]?.date ?? "")} -{" "}
-                {formatTime2(flightData?.segments[1]?.date ?? "")}
+                {formatTime2(
+                  flightData?.segments[1]?.date ?? "",
+                  flightData?.segments[1]?.duration ?? 0,
+                )}
               </span>
             </div>
           </div>

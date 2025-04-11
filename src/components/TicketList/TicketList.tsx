@@ -3,12 +3,25 @@ import Ticket from "../Ticket/Ticket.tsx";
 import { Space } from "antd";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../../hooks/useMyContext.ts";
-import { ITicket } from "../../hooks/MyContextProvider.tsx";
+import { ITicket } from "../../types/types.ts";
+import PaginationButton from "../PaginationButton/PaginationButton.tsx";
 
 const TicketList = () => {
   const { newFlights, state } = useMyContext();
   const [sortedFlights, setSortedFlights] = useState<ITicket[]>([]);
   const [filterFlights, setFilterFlights] = useState<ITicket[]>([]);
+
+  const getFilterFlights = (stops: number) => {
+    setFilterFlights((prev) =>
+      prev.concat(
+        newFlights.filter(
+          (item) =>
+            item.segments[0].stops.length + item.segments[1].stops.length ===
+            stops,
+        ),
+      ),
+    );
+  };
 
   useEffect(() => {
     if (state.sorter === "cheapest") {
@@ -53,57 +66,36 @@ const TicketList = () => {
       return;
     }
     if (state.filter.noStops) {
-      setFilterFlights((prev) =>
-        prev.concat(
-          newFlights.filter(
-            (item) =>
-              item.segments[0].stops.length + item.segments[1].stops.length ===
-              0,
-          ),
-        ),
-      );
+      getFilterFlights(0);
     }
     if (state.filter.oneStop) {
-      setFilterFlights((prev) =>
-        prev.concat(
-          newFlights.filter(
-            (item) =>
-              item.segments[0].stops.length + item.segments[1].stops.length ===
-              1,
-          ),
-        ),
-      );
+      getFilterFlights(1);
     }
     if (state.filter.twoStops) {
-      setFilterFlights((prev) =>
-        prev.concat(
-          newFlights.filter(
-            (item) =>
-              item.segments[0].stops.length + item.segments[1].stops.length ===
-              2,
-          ),
-        ),
-      );
+      getFilterFlights(2);
     }
     if (state.filter.threeStops) {
-      setFilterFlights((prev) =>
-        prev.concat(
-          newFlights.filter(
-            (item) =>
-              item.segments[0].stops.length + item.segments[1].stops.length ===
-              3,
-          ),
-        ),
-      );
+      getFilterFlights(3);
     }
   }, [state.filter, newFlights]);
 
   return (
     <div className={classes.container}>
       <Space direction="vertical" size={"middle"} style={{ display: "flex" }}>
-        {sortedFlights.map((item) => (
-          <Ticket flightData={item} key={item.price + item.segments[0].date} />
-        ))}
+        {sortedFlights.length ? (
+          sortedFlights.map((item) => (
+            <Ticket
+              flightData={item}
+              key={item.price + item.segments[0].date}
+            />
+          ))
+        ) : (
+          <div className={classes.warning}>
+            {" "}
+            Рейсов, подходящих под заданные фильтры, не найдено
+          </div>
+        )}
+        {sortedFlights.length ? <PaginationButton /> : null}
       </Space>
     </div>
   );

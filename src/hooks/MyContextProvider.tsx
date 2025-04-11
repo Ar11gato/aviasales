@@ -1,42 +1,45 @@
-import { useState, PropsWithChildren, useEffect } from "react";
-import { getFlights, getSearchId } from "../api/getSearchId.ts";
+import React, { useState, useEffect } from "react";
+import { getDataId, getDataTickets } from "../api/getSearchId.ts";
 
-export interface ISegment {
-  origin: string;
-  destination: string;
-  date: string;
-  stops: string[];
-  duration: number;
-}
-export interface ITicket {
-  price: number;
-  carrier: string;
-  segments: ISegment[];
-}
-
-interface IState {
-  pagination: number;
-  sorter: string;
-  filter: {
-    all: boolean;
-    noStops: boolean;
-    oneStop: boolean;
-    twoStops: boolean;
-    threeStops: boolean;
-  };
-}
-
-export interface IMyContextProps {
-  state: IState;
-  setState: (state: IState) => void;
-  newFlights: ITicket[];
-  setNewFlights: (newFlights: ITicket[]) => void;
-}
 import { createContext } from "react";
+import { IMyContextProps, IState, ITicket } from "../types/types.ts";
+import { useQuery } from "@tanstack/react-query";
 
 export const MyContext = createContext<IMyContextProps | null>(null);
 
-export const MyContextProvider = ({ children }: PropsWithChildren) => {
+function getSearchId() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { data } = useQuery({
+    queryKey: ["searchId"],
+    queryFn: getDataId,
+    select: (data) => data.data.searchId,
+
+    retryDelay: 5000,
+  });
+
+  return { searchId: data };
+}
+
+function getFlights(id: string) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { data } = useQuery({
+    queryKey: ["flights"],
+    queryFn: () => getDataTickets(id),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    select: (data) => data.data.tickets,
+
+    // retryDelay: 5000,
+  });
+
+  return { flights: data };
+}
+
+export const MyContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [newFlights, setNewFlights] = useState<ITicket[]>([]);
 
   const [state, setState] = useState<IState>({
@@ -50,6 +53,8 @@ export const MyContextProvider = ({ children }: PropsWithChildren) => {
       threeStops: false,
     },
   });
+
+  const [result, setResult] = useState<boolean>(true);
 
   const { searchId } = getSearchId();
   const { flights } = getFlights(searchId);
@@ -67,6 +72,8 @@ export const MyContextProvider = ({ children }: PropsWithChildren) => {
         setState,
         newFlights,
         setNewFlights,
+        result,
+        setResult,
       }}
     >
       {children}

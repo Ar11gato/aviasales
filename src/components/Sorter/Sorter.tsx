@@ -1,8 +1,8 @@
 import classes from "./Sorter.module.scss";
 import { Radio } from "antd";
 import type { CheckboxGroupProps } from "antd/es/checkbox";
-import { useContext } from "react";
-import { MyContext } from "../../hooks/MyContextProvider.tsx";
+
+import { useMyContext } from "../../hooks/useMyContext.ts";
 
 const options: CheckboxGroupProps<string>["options"] = [
   { label: "САМЫЙ ДЕШЕВЫЙ", value: "cheapest" },
@@ -11,7 +11,7 @@ const options: CheckboxGroupProps<string>["options"] = [
 ];
 
 const Sorter = () => {
-  const context = useContext(MyContext);
+  const context = useMyContext();
 
   return (
     <div className={classes.radiogroup}>

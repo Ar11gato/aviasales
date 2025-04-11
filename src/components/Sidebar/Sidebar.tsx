@@ -1,17 +1,32 @@
 import classes from "./Sidebar.module.scss";
 import { Checkbox, ConfigProvider } from "antd";
 import useCheckbox from "../../hooks/useCheckbox.ts";
-import { useContext } from "react";
-import { MyContext } from "../../hooks/MyContextProvider.tsx";
+
+import { useMyContext } from "../../hooks/useMyContext.ts";
 
 const Sidebar = () => {
-  const context = useContext(MyContext);
+  const context = useMyContext();
 
   const all = useCheckbox("all");
-  const no = useCheckbox("noStops");
-  const one = useCheckbox("oneStop");
-  const two = useCheckbox("twoStops");
-  const three = useCheckbox("threeStops");
+  const noStops = useCheckbox("noStops");
+  const oneStop = useCheckbox("oneStop");
+  const twoStops = useCheckbox("twoStops");
+  const threeStops = useCheckbox("threeStops");
+  const array = [all, noStops, oneStop, twoStops, threeStops];
+  const checkboxClassNames: string[] = [
+    "all",
+    "noStops",
+    "oneStop",
+    "twoStops",
+    "threeStops",
+  ];
+  const checkboxNames: string[] = [
+    "Все",
+    "Без пересадок",
+    "1 пересадка",
+    "2 пересадки",
+    "3 пересадки",
+  ];
 
   return (
     <div className={classes.container}>
@@ -26,41 +41,16 @@ const Sidebar = () => {
         }}
       >
         <div className={classes.checkboxes}>
-          <Checkbox
-            {...all}
-            checked={context?.state.filter.all}
-            className={classes.checkbox}
-          >
-            Все
-          </Checkbox>
-          <Checkbox
-            {...no}
-            checked={context?.state.filter.noStops}
-            className={classes.checkbox}
-          >
-            Без пересадок
-          </Checkbox>
-          <Checkbox
-            {...one}
-            checked={context?.state.filter.oneStop}
-            className={classes.checkbox}
-          >
-            1 пересадка
-          </Checkbox>
-          <Checkbox
-            {...two}
-            checked={context?.state.filter.twoStops}
-            className={classes.checkbox}
-          >
-            2 пересадки
-          </Checkbox>
-          <Checkbox
-            {...three}
-            checked={context?.state.filter.threeStops}
-            className={classes.checkbox}
-          >
-            3 пересадки
-          </Checkbox>
+          {array.map((item, i: number) => (
+            <Checkbox
+              {...item}
+              checked={context?.state.filter[checkboxClassNames[i]]}
+              className={classes.checkbox}
+              key={checkboxClassNames[i]}
+            >
+              {checkboxNames[i]}
+            </Checkbox>
+          ))}
         </div>
       </ConfigProvider>
     </div>
