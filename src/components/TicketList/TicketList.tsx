@@ -89,10 +89,14 @@ const TicketList = () => {
               key={item.price + item.segments[0].date}
             />
           ))
-        ) : (
+        ) : !state.filter.noStops ? (
           <div className={classes.warning}>
             {" "}
             Рейсов, подходящих под заданные фильтры, не найдено
+          </div>
+        ) : (
+          <div className={classes.loading}>
+            LOADING BRO <div className={classes.loader}></div>{" "}
           </div>
         )}
         {sortedFlights.length ? <PaginationButton /> : null}
