@@ -36,7 +36,7 @@ const Sidebar = () => {
           token: {
             controlInteractiveSize: 25,
             colorPrimary: "#ffffff",
-            colorWhite: "#1f04ff",
+            colorWhite: "#2504ff",
           },
         }}
       >
